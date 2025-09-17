@@ -1,0 +1,98 @@
+/* ==============================
+   Root Variables (Theme)
+   ============================== */
+:root {
+  --primary: #2d6a4f;
+  --secondary: #ff6b35;
+  --font-heading: "Poppins", sans-serif;
+  --font-body: "Roboto", sans-serif;
+}
+
+/* ==============================
+   General Reset & Base Styles
+   ============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: #f9f9f9;
+  color: #333;
+}
+
+h1,
+h2,
+h3,
+h4,
+button {
+  font-family: var(--font-heading);
+}
+
+/* ==============================
+   Layout / Sections
+   ============================== */
+header {
+  background-color: var(--primary);
+}
+
+/* ==============================
+   Form Controls
+   ============================== */
+#filter-meals.form-control:focus,
+#meal-form .form-control:focus,
+#limit-form .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: none;
+}
+#filter-workouts.form-control:focus,
+#workout-form .form-control:focus {
+  border-color: var(--secondary);
+  box-shadow: none;
+}
+
+/* ==============================
+   Buttons
+   ============================== */
+.btn-primary {
+  background-color: var(--primary);
+  outline: none;
+  border: none;
+}
+.btn-primary:hover {
+  filter: brightness(115%);
+  background-color: var(--primary);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  outline: none;
+  border: none;
+}
+.btn-secondary:hover {
+  filter: brightness(115%);
+  background-color: var(--secondary);
+}
+
+/* ==============================
+   Components
+   ============================== */
+.progress {
+  height: 25px;
+}
+
+.card-body {
+  transition: 0.3s ease;
+}
+.card-body:hover {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+#meal-items h2 {
+  background-color: var(--primary);
+}
+#workout-items h2 {
+  background-color: var(--secondary);
+}
