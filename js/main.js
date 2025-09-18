@@ -64,6 +64,7 @@ class CalorieTracker {
 
   // Reset tracker to initial state
   resetDay() {
+    this.#caloriesLimit = 2000
     this.#caloriesBalance = 0
     this.#meals = []
     this.#workouts = []
