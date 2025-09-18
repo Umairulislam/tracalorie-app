@@ -63,7 +63,7 @@ header {
 }
 .btn-primary:hover {
   filter: brightness(115%);
-  background-color: var(--primary);
+  background-color: var(--primary) !important;
 }
 
 .btn-secondary {
@@ -73,7 +73,7 @@ header {
 }
 .btn-secondary:hover {
   filter: brightness(115%);
-  background-color: var(--secondary);
+  background-color: var(--secondary) !important;
 }
 
 /* ==============================
