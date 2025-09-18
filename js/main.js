@@ -12,10 +12,10 @@ function showToast(message, type = "success") {
 
 class CalorieTracker {
   // Private fields
-  #caloriesLimit = 2000
-  #caloriesBalance = 0
-  #meals = []
-  #workouts = []
+  #caloriesLimit = Storage.getCalorieLimit()
+  #caloriesBalance = Storage.getCalorieBalance()
+  #meals = Storage.getItems("meal")
+  #workouts = Storage.getItems("workout")
 
   // Render stats on initialization
   constructor() {
@@ -26,6 +26,7 @@ class CalorieTracker {
   addMeal(meal) {
     this.#meals.push(meal)
     this.#caloriesBalance += meal.calories
+    Storage.addItem(meal, "meal")
     this.#displayNewItem(meal, "meal")
     this.#renderStats()
   }
@@ -34,6 +35,7 @@ class CalorieTracker {
   addWorkout(workout) {
     this.#workouts.push(workout)
     this.#caloriesBalance -= workout.calories
+    Storage.addItem(workout, "workout")
     this.#displayNewItem(workout, "workout")
     this.#renderStats()
   }
@@ -45,6 +47,7 @@ class CalorieTracker {
 
     this.#caloriesBalance -= meal.calories
     this.#meals = this.#meals.filter((m) => m.id !== id)
+    Storage.removeItem(id, "meal")
     this.#renderStats()
   }
 
@@ -55,6 +58,7 @@ class CalorieTracker {
 
     this.#caloriesBalance += workout.calories
     this.#workouts = this.#workouts.filter((w) => w.id !== id)
+    Storage.removeItem(id, "workout")
     this.#renderStats()
   }
 
@@ -69,11 +73,15 @@ class CalorieTracker {
   // Set a new calorie limit and update stats
   setLimit(calorieLimit) {
     this.#caloriesLimit = calorieLimit
+    Storage.setCalorieLimit(calorieLimit)
     this.#renderStats()
   }
 
   // Load and display saved meals and workouts from localStorage
-  loadItems() {}
+  loadItems() {
+    this.#meals.forEach((meal) => this.#displayNewItem(meal, "meal"))
+    this.#workouts.forEach((workout) => this.#displayNewItem(workout, "workout"))
+  }
 
   // Display calories limit
   #displayCaloriesLimit() {
@@ -85,6 +93,7 @@ class CalorieTracker {
   #displayCaloriesBalance() {
     const caloriesBalanceEl = document.querySelector("#calories-balance")
     caloriesBalanceEl.textContent = this.#caloriesBalance
+    Storage.setCalorieBalance(this.#caloriesBalance)
   }
 
   // Display total calories consumed from meals
@@ -207,6 +216,44 @@ class Workout {
   }
 }
 
+// Handles saving and retrieving calorie data from localStorage
+class Storage {
+  static getCalorieLimit() {
+    const savedCalorieLimit = localStorage.getItem("calorieLimit")
+    return savedCalorieLimit ? +savedCalorieLimit : 2000
+  }
+
+  static setCalorieLimit(calorieLimit) {
+    localStorage.setItem("calorieLimit", calorieLimit)
+  }
+
+  static getCalorieBalance() {
+    const savedCalorieBalance = localStorage.getItem("calorieBalance")
+    return savedCalorieBalance ? +savedCalorieBalance : 0
+  }
+
+  static setCalorieBalance(calorieBalance) {
+    localStorage.setItem("calorieBalance", calorieBalance)
+  }
+
+  static getItems(type) {
+    const savedItems = localStorage.getItem(type)
+    return savedItems ? JSON.parse(savedItems) : []
+  }
+
+  static addItem(item, type) {
+    const items = Storage.getItems(type)
+    items.push(item)
+    localStorage.setItem(type, JSON.stringify(items))
+  }
+
+  static removeItem(id, type) {
+    const items = Storage.getItems(type)
+    const filteredItems = items.filter((item) => item.id !== id)
+    localStorage.setItem(type, JSON.stringify(filteredItems))
+  }
+}
+
 // Main application class to handle UI and interactions
 class App {
   #tracker = new CalorieTracker()
@@ -214,6 +261,8 @@ class App {
   constructor() {
     // Load all event listeners
     this.#loadEventListeners()
+    // Load and display saved items from localStorage
+    this.#tracker.loadItems()
   }
 
   #loadEventListeners() {
