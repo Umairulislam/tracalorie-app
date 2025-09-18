@@ -67,6 +67,7 @@ class CalorieTracker {
     this.#caloriesBalance = 0
     this.#meals = []
     this.#workouts = []
+    Storage.clearAll()
     this.#renderStats()
   }
 
@@ -251,6 +252,10 @@ class Storage {
     const items = Storage.getItems(type)
     const filteredItems = items.filter((item) => item.id !== id)
     localStorage.setItem(type, JSON.stringify(filteredItems))
+  }
+
+  static clearAll() {
+    localStorage.clear()
   }
 }
 
